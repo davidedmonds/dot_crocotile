@@ -1,3 +1,6 @@
+//! Load .crocotile maps into memory.
+#![deny(missing_docs)]
+
 extern crate base64;
 extern crate failure;
 extern crate serde;
@@ -7,11 +10,35 @@ extern crate serde_json;
 
 mod map;
 
-pub use map::MapData;
+pub use map::*;
 
 use failure::Error;
 use std::fs::File;
 
+/// Loads the supplied .crocotile file
+///
+/// Loads the supplied file, parses it, and returns a `MapData` containing
+/// configuration and all the models within the map.
+///
+/// # Panics
+/// No panics should occur with this library - if you find one, please raise a
+/// GitHub issue for it.
+///
+/// # Errors
+/// Errors are wrapped using the `failure` crate. If you need to interop with
+/// code that doesn't presently use `failure`, wrap the errors in a `Compat`.
+///
+/// # Examples
+///
+/// Loading a file:
+///
+/// ```
+/// use dot_crocotile::*;
+///
+/// let map = load("src/resources/swamp.crocotile").unwrap();
+/// assert_eq!(16, map.config.tilesize_x);
+/// assert_eq!(1, map.model.len());
+/// ```
 pub fn load(filename: &str) -> Result<MapData, Error> {
     let f = File::open(filename)?;
     let map: MapData = serde_json::from_reader(f)?;

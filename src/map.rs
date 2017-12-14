@@ -3,46 +3,70 @@ use serde::Deserializer;
 use serde::de::{Error, Visitor};
 use std::fmt;
 
+/// Container for Crocotile Map data
 #[derive(Debug, Deserialize, Serialize)]
 pub struct MapData {
+    /// Configuration for the map.
     pub config: Config,
+    /// All the models contained within the map
     pub model: Vec<Model>,
 }
 
+/// Map-wide configuration
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Config {
+    /// The width of a tile from the texture map
     pub tilesize_x: u16,
+    /// The height of a tile from the texture map
     pub tilesize_y: u16,
 }
 
+/// A model, which is made from a texture map and a `Vec<Object>`
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Model {
-    #[serde(deserialize_with = "decode_base64")] pub texture: Vec<u8>,
+    /// The texture used on the model
+    #[serde(deserialize_with = "decode_base64")]
+    pub texture: Vec<u8>,
+    /// The individual parts of the model
     pub object: Vec<Object>,
 }
 
+/// A distinct part of a model.
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Object {
+    /// Object-level translation
     pub position: Vertex,
+    /// List of all vertices used to display this object
     pub vertices: Vec<Vertex>,
+    /// Indexes of vertices grouped by triangle
     pub faces: Vec<Triangle>,
+    /// Texture coordinates for each triangle
     pub uvs: Vec<UV>,
 }
 
+/// A vertex representing a point of an object.
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Vertex {
+    /// X coordinate
     pub x: f32,
+    /// Y coordinate
     pub y: f32,
+    /// Z coordinate
     pub z: f32,
 }
 
-type Triangle = [u8; 3];
-type UV = [UVCoord; 3];
+/// The three indexes into the vertex list used to draw a triangle.
+pub type Triangle = [u8; 3];
+/// The Texture coordinates to use for each vertex of a triangle.
+pub type UV = [UVCoord; 3];
 
+/// Texture coordinates
 #[derive(Debug, Deserialize, Serialize)]
 pub struct UVCoord {
+    /// X coordinate
     pub x: f32,
+    /// Y coordinate
     pub y: f32,
 }
 
