@@ -35,7 +35,7 @@ use std::fs::File;
 /// ```
 /// use dot_crocotile::*;
 ///
-/// let map = load("src/resources/swamp.crocotile").unwrap();
+/// let map = load("src/resources/green.crocotile").unwrap();
 /// assert_eq!(16, map.config.tilesize_x);
 /// assert_eq!(1, map.model.len());
 /// ```
@@ -68,27 +68,27 @@ mod tests {
 
     #[test]
     fn trying_to_parse_a_valid_file_succeeds() {
-        let actual = load("src/resources/swamp.crocotile").expect("Should successfully load");
+        let actual = load("src/resources/green.crocotile").expect("Should successfully load");
         assert_eq!(16, actual.config.tilesize_x);
         assert_eq!(1, actual.model.len());
 
         let model = &actual.model[0];
-        let expected_image = include_bytes!("resources/swamp.png").to_vec();
+        let expected_image = include_bytes!("resources/green.png").to_vec();
         assert_eq!(expected_image, model.texture);
-        assert_eq!(507, model.object.len());
+        assert_eq!(27, model.object.len());
 
         let object = &model.object[0];
-        assert_eq!(2.5, object.position.x);
-        assert_eq!(0.0, object.position.y);
-        assert_eq!(0.625, object.position.z);
+        assert_eq!(-0.5, object.position.x);
+        assert_eq!(0.5, object.position.y);
+        assert_eq!(0.0, object.position.z);
         assert_eq!(4, object.vertices.len());
         assert_eq!(2, object.faces.len());
         assert_eq!(2, object.uvs.len());
 
         let vertice = &object.vertices[0];
-        assert_eq!(0.50000000249975, vertice.x);
-        assert_eq!(-0.000049995000154012814, vertice.y);
-        assert_eq!(0.875, vertice.z);
+        assert_eq!(-0.5, vertice.x);
+        assert_eq!(-0.5, vertice.y);
+        assert_eq!(0.0, vertice.z);
 
         let face = &object.faces[0];
         assert_eq!(0, face[0]);
@@ -97,10 +97,10 @@ mod tests {
 
         let uv = &object.uvs[0];
         assert_eq!(0.0, uv[0].x);
-        assert_eq!(0.0625, uv[0].y);
+        assert_eq!(0.9375, uv[0].y);
         assert_eq!(0.0625, uv[1].x);
-        assert_eq!(0.125, uv[1].y);
+        assert_eq!(1.0, uv[1].y);
         assert_eq!(0.0, uv[2].x);
-        assert_eq!(0.125, uv[2].y);
+        assert_eq!(1.0, uv[2].y);
     }
 }
