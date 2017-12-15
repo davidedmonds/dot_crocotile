@@ -1,6 +1,6 @@
 [package]
 name = "dot_crocotile"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["David Edmonds <edmonds.d.r@gmail.com>"]
 description = "A Rust library for loading .crocotile files."
 license = "MIT"

@@ -45,6 +45,36 @@ pub fn load(filename: &str) -> Result<MapData, Error> {
     Ok(map)
 }
 
+/// Loads the supplied byte slice into a `MapData`.
+///
+/// Parses the supplied byte slice and returns a `MapData` containing
+/// configuration and all the models within the map.
+///
+/// # Panics
+/// No panics should occur with this library - if you find one, please raise a
+/// GitHub issue for it.
+///
+/// # Errors
+/// Errors are wrapped using the `failure` crate. If you need to interop with
+/// code that doesn't presently use `failure`, wrap the errors in a `Compat`.
+///
+/// # Examples
+///
+/// Loading a byte slice:
+///
+/// ```
+/// use dot_crocotile::*;
+///
+/// let bytes = include_bytes!("resources/green.crocotile").to_vec();
+/// let map = load_from_bytes(&bytes).unwrap();
+/// assert_eq!(16, map.config.tilesize_x);
+/// assert_eq!(1, map.model.len());
+/// ```
+pub fn load_from_bytes(bytes: &[u8]) -> Result<MapData, Error> {
+    let map: MapData = serde_json::from_slice(bytes)?;
+    Ok(map)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
