@@ -69,11 +69,13 @@ mod tests {
     #[test]
     fn trying_to_parse_a_valid_file_succeeds() {
         let actual = load("src/resources/green.crocotile").expect("Should successfully load");
+        let expected_image = include_bytes!("resources/green.png").to_vec();
         assert_eq!(16, actual.config.tilesize_x);
+        assert_eq!(16, actual.config.tilesize_y);
+        assert_eq!(expected_image, actual.config.skybox.unwrap());
         assert_eq!(1, actual.model.len());
 
         let model = &actual.model[0];
-        let expected_image = include_bytes!("resources/green.png").to_vec();
         assert_eq!(expected_image, model.texture);
         assert_eq!(27, model.object.len());
 

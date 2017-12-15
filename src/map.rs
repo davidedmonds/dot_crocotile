@@ -20,6 +20,10 @@ pub struct Config {
     pub tilesize_x: u16,
     /// The height of a tile from the texture map
     pub tilesize_y: u16,
+    /// Texture to use on the skybox
+    #[serde(default)]
+    #[serde(deserialize_with = "decode_base64_opt")]
+    pub skybox: Option<Vec<u8>>,
 }
 
 /// A model, which is made from a texture map and a `Vec<Object>`
@@ -68,6 +72,15 @@ pub struct UVCoord {
     pub x: f32,
     /// Y coordinate
     pub y: f32,
+}
+
+fn decode_base64_opt<'de, D>(deserializer: D) -> Result<Option<Vec<u8>>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    deserializer
+        .deserialize_bytes(Base64Visitor)
+        .map(|data| Some(data))
 }
 
 fn decode_base64<'de, D>(deserializer: D) -> Result<Vec<u8>, D::Error>
